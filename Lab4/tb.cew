@@ -1,0 +1,87 @@
+//================================================================--
+// Design Unit  : cew testbench for lab4
+//
+// File Name    : tb.cew
+//
+// Purpose      : design verification
+//
+// Author       : Peter Walsh, Vancouver Island University
+//
+// System       : icarus (Linux)
+//
+//------------------------------------------------------------------
+// Revision List
+// Version      Author  Date    Changes
+// 1.0          PW      Sep 10  New version
+//================================================================--
+
+
+include(cew.v)
+
+module test_bench();
+
+   cew_Variables
+   wire t_a, t_b, t_c, t_d, t_e, t_f, t_g, t_dp;
+   reg t_w, t_x, t_y, t_z;
+   reg [7:0] t_o;
+
+   integer i;
+
+
+   lab4 cut(t_w, t_x, t_y, t_z, t_a, t_b, t_c, t_d, t_e, t_f, t_g, t_dp);
+
+   initial begin
+      $dumpfile("test_bench.vcd");
+      $dumpvars(0,test_bench);
+
+      for (i=0; i<10; i=i+1)
+         begin
+         cew_Ncase(t_w=i[3];t_x=i[2];t_y=i[1];t_z=i[0];#1;, t_dp, 0, !==)
+         end
+
+      t_w=0;t_x=0;t_y=0;t_z=0;#1;
+      t_o={t_a, t_b, t_c, t_d, t_e, t_f, t_g, t_dp};
+      cew_Ncase(, t_o, 8'b11111100, !==) // 0
+
+      t_w=0;t_x=0;t_y=0;t_z=1;#1;
+      t_o={t_a, t_b, t_c, t_d, t_e, t_f, t_g, t_dp};
+      cew_Ncase(, t_o, 8'b01100000, !==) // 1
+
+      t_w=0;t_x=0;t_y=1;t_z=0;#1;
+      t_o={t_a, t_b, t_c, t_d, t_e, t_f, t_g, t_dp};
+      cew_Ncase(, t_o, 8'b11011010, !==) // 2
+
+      t_w=0;t_x=0;t_y=1;t_z=1;#1;
+      t_o={t_a, t_b, t_c, t_d, t_e, t_f, t_g, t_dp};
+      cew_Ncase(, t_o, 8'b11110010, !==) // 3
+
+      t_w=0;t_x=1;t_y=0;t_z=0;#1;
+      t_o={t_a, t_b, t_c, t_d, t_e, t_f, t_g, t_dp};
+      cew_Ncase(, t_o, 8'b01100110, !==) // 4
+
+      t_w=0;t_x=1;t_y=0;t_z=1;#1;
+      t_o={t_a, t_b, t_c, t_d, t_e, t_f, t_g, t_dp};
+      cew_Ncase(, t_o, 8'b10110110, !==) // 5
+
+      t_w=0;t_x=1;t_y=1;t_z=0;#1;
+      t_o={t_a, t_b, t_c, t_d, t_e, t_f, t_g, t_dp};
+      cew_Ncase(, t_o, 8'b10111110, !==) // 6
+
+      t_w=0;t_x=1;t_y=1;t_z=1;#1;
+      t_o={t_a, t_b, t_c, t_d, t_e, t_f, t_g, t_dp};
+      cew_Ncase(, t_o, 8'b11100000, !==) // 7
+
+      t_w=1;t_x=0;t_y=0;t_z=0;#1;
+      t_o={t_a, t_b, t_c, t_d, t_e, t_f, t_g, t_dp};
+      cew_Ncase(, t_o, 8'b11111110, !==) // 8
+
+      t_w=1;t_x=0;t_y=0;t_z=1;#1;
+      t_o={t_a, t_b, t_c, t_d, t_e, t_f, t_g, t_dp};
+      cew_Ncase(, t_o, 8'b11110110, !==) // 9
+
+      cew_Summary
+      #10 $finish();
+   end
+
+endmodule
+

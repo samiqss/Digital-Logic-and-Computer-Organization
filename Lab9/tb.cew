@@ -1,0 +1,97 @@
+//================================================================--
+// Design Unit  : cew testbench lab9
+//
+// File Name    : tb.cew
+//
+// Purpose      : design verification
+//
+// Author       : Peter Walsh, Vancouver Island University
+//
+// System       : icarus (Linux)
+//
+//------------------------------------------------------------------
+// Revision List
+// Version      Author  Date    Changes
+// 1.0          PW      Sep 10  New version
+//================================================================--
+
+
+include(cew.v)
+
+module test_bench();
+
+   cew_Variables
+   reg t_reset, t_clk, t_sto, t_lto, t_car;
+   wire [2:0] t_Hlights, t_Flights;
+   wire [1:0] t_state;
+
+   // state  encoding
+   localparam t_HG = 2'b00, t_HY = 2'b01, t_FG = 2'b11, t_FY = 2'b10;
+
+   lab9 cut (t_state,  t_clk, t_sto, t_lto, t_car, t_reset, t_Hlights, t_Flights);
+
+   task clockTick; 
+      begin // nasty syntax
+         t_clk=0; #3; 
+         t_clk=1; #6;
+         t_clk=0; #3;
+      end
+   endtask
+
+   task setState;
+
+      input [1:0]  x;
+
+      begin
+
+         t_reset<=1;#1;t_reset<=0;#1; t_reset<=1;#1;
+         case (x)
+            t_HG: begin
+            end
+            t_HY: begin
+              t_sto=0;t_lto=1;t_car=1;clockTick(); 
+            end
+            t_FG: begin
+              t_sto=0;t_lto=1;t_car=1;clockTick(); 
+              t_sto=1;t_lto=0;t_car=0;clockTick(); 
+            end
+            t_FY: begin
+              t_sto=0;t_lto=1;t_car=1;clockTick(); 
+              t_sto=1;t_lto=0;t_car=0;clockTick(); 
+              t_sto=0;t_lto=1;t_car=0;clockTick(); 
+            end
+         endcase
+      end
+ 
+   endtask
+
+   initial begin
+      $dumpfile("test_bench.vcd");
+      $dumpvars(0,test_bench);
+
+      // State t_HG
+      cew_Ncase(setState(t_HG);, t_state, t_HG, !==)
+      cew_Ncase(, t_Hlights, 3'b 010, !==)
+      cew_Ncase(, t_Flights, 3'b 100, !==)
+
+      // State t_HY
+      cew_Ncase(setState(t_HY);, t_state, t_HY, !==)
+      cew_Ncase(, t_Hlights, 3'b 001, !==)
+      cew_Ncase(, t_Flights, 3'b 100, !==)
+
+      // State t_FG
+      cew_Ncase(setState(t_FG);, t_state, t_FG, !==)
+      cew_Ncase(, t_Hlights, 3'b 100, !==)
+      cew_Ncase(, t_Flights, 3'b 010, !==)
+
+      // State t_FY_
+      cew_Ncase(setState(t_FY);, t_state, t_FY, !==)
+      cew_Ncase(, t_Hlights, 3'b 100, !==)
+      cew_Ncase(, t_Flights, 3'b 001, !==)
+
+      cew_Summary
+      #1 $finish();
+   end
+
+endmodule
+

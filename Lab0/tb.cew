@@ -1,0 +1,52 @@
+//================================================================--
+// Design Unit  : cew testbench for lab0
+//
+// File Name    : tb.cew
+//
+// Purpose      : design verification
+//
+// Note         :
+//
+// Limitations  :
+//
+// Errors       : none known
+//
+// Library      : sn7404, sn7432, sn7408 
+//
+// Dependences  : none
+//
+// Author       : Peter Walsh, Vancouver Island University
+//
+// System       : icarus (Linux)
+//
+//------------------------------------------------------------------
+// Revision List
+// Version      Author  Date    Changes
+// 1.0          PW      Sep 10  New version
+//================================================================--
+
+
+include(cew.v)
+
+module test_bench();
+
+   cew_Variables
+   wire t_C;
+   reg t_A, t_B;
+
+   lab0 cut(t_C, t_A, t_B);
+
+   initial begin
+      $dumpfile("test_bench.vcd");
+      $dumpvars(0,test_bench);
+
+      cew_Ncase(t_A=0;t_B=0;#1;, t_C, 0, !==)
+      cew_Ncase(t_A=0;t_B=1;#1;, t_C, 1, !==)
+      cew_Ncase(t_A=1;t_B=0;#1;, t_C, 1, !==)
+      cew_Ncase(t_A=1;t_B=1;#1;, t_C, 0, !==)
+      cew_Summary
+      #1 $finish();
+   end
+
+endmodule
+

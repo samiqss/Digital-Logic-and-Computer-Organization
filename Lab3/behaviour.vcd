@@ -1,0 +1,180 @@
+$date
+	Thu Oct 11 19:37:14 2018
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module test_bench $end
+$var wire 1 ! t_g $end
+$var wire 1 " t_f $end
+$var wire 1 # t_e $end
+$var wire 1 $ t_dp $end
+$var wire 1 % t_d $end
+$var wire 1 & t_c $end
+$var wire 1 ' t_b $end
+$var wire 1 ( t_a $end
+$var reg 8 ) t_o [7:0] $end
+$var reg 1 * t_w $end
+$var reg 1 + t_x $end
+$var reg 1 , t_y $end
+$var reg 1 - t_z $end
+$var integer 32 . cew_Error_Count [31:0] $end
+$var integer 32 / cew_Test_Count [31:0] $end
+$var integer 32 0 i [31:0] $end
+$scope module cut $end
+$var wire 1 * w $end
+$var wire 1 + x $end
+$var wire 1 , y $end
+$var wire 1 - z $end
+$var reg 1 ( a $end
+$var reg 1 ' b $end
+$var reg 1 & c $end
+$var reg 1 % d $end
+$var reg 1 $ dp $end
+$var reg 1 # e $end
+$var reg 1 " f $end
+$var reg 1 ! g $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b0 0
+b1 /
+b0 .
+0-
+0,
+0+
+0*
+bx )
+0(
+1'
+1&
+0%
+1$
+0#
+0"
+0!
+$end
+#1
+1"
+1#
+1%
+1(
+1-
+b10 /
+b1 0
+#2
+1!
+0%
+0-
+1,
+b11 /
+b10 0
+#3
+1%
+1-
+b100 /
+b11 0
+#4
+0!
+0&
+0'
+0-
+0,
+1+
+b101 /
+b100 0
+#5
+1&
+1'
+1-
+b110 /
+b101 0
+#6
+1!
+0&
+0'
+0-
+1,
+b111 /
+b110 0
+#7
+0%
+1-
+b1000 /
+b111 0
+#8
+0!
+0"
+0#
+1&
+1'
+0(
+0-
+0,
+0+
+1*
+b1001 /
+b1000 0
+#9
+1"
+1#
+1%
+1(
+1-
+b1010 /
+b1001 0
+#10
+0$
+1!
+0%
+0-
+1,
+b1010 0
+#11
+b11101110 )
+#12
+1%
+1-
+b1011 /
+#13
+b11111110 )
+#14
+0!
+0&
+0'
+0-
+0,
+1+
+b1100 /
+#15
+b10011100 )
+#16
+1&
+1'
+1-
+b1101 /
+#17
+b11111100 )
+#18
+1!
+0&
+0'
+0-
+1,
+b1110 /
+#19
+b10011110 )
+#20
+0%
+1-
+b1111 /
+#21
+b10001110 )
+#22
+b10000 /
+#23

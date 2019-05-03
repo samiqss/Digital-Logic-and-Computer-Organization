@@ -1,0 +1,14 @@
+rm -f ../../Cew/tmp/tb.v
+awk -f ../../Cew/bin/addLineNums.awk tb.cew > ../../Cew/tmp/tb.num
+m4  -I ../../Cew/bin ../../Cew/tmp/tb.num | cat  > tb.v
+iverilog -Wall -o myttl tb.v ttl.v ../../TTL/sn7476/behaviour.v ../../TTL/sn7486/behaviour.v ../../TTL/sn7432/behaviour.v
+vvp myttl
+VCD info: dumpfile test_bench.vcd opened for output.
+
+**********Summary**********
+
+Total number of test cases =          68 
+
+Total number of test cases in error =           0 
+
+mv test_bench.vcd ttl.vcd

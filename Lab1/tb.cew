@@ -1,0 +1,56 @@
+//================================================================--
+// Design Unit  : cew testbench for lab1
+//
+// File Name    : tb.cew
+//
+// Purpose      : design verification
+//
+// Note         :
+//
+// Limitations  :
+//
+// Errors       : none known
+//
+// Library      : lab1 
+//
+// Dependences  : none
+//
+// Author       : Peter Walsh, Vancouver Island University
+//
+// System       : icarus (Linux)
+//
+//------------------------------------------------------------------
+// Revision List
+// Version      Author  Date    Changes
+// 1.0          PW      Sep 10  New version
+//================================================================--
+
+
+include(cew.v)
+
+module test_bench();
+
+   cew_Variables
+   wire t_D;
+   reg t_A, t_B, t_C;
+
+   lab1 cut(t_D, t_A, t_B, t_C);
+
+   initial begin
+      $dumpfile("test_bench.vcd");
+      $dumpvars(0,test_bench);
+
+      cew_Ncase(t_A=0;t_B=0;t_C=0;#1;, t_D, 1, !==)
+      cew_Ncase(t_A=0;t_B=0;t_C=1;#1;, t_D, 1, !==)
+      cew_Ncase(t_A=0;t_B=1;t_C=0;#1;, t_D, 1, !==)
+      cew_Ncase(t_A=0;t_B=1;t_C=1;#1;, t_D, 0, !==)
+      cew_Ncase(t_A=1;t_B=0;t_C=0;#1;, t_D, 1, !==)
+      cew_Ncase(t_A=1;t_B=0;t_C=1;#1;, t_D, 0, !==)
+      cew_Ncase(t_A=1;t_B=1;t_C=0;#1;, t_D, 0, !==)
+      cew_Ncase(t_A=1;t_B=1;t_C=1;#1;, t_D, 0, !==)
+      cew_Summary
+      #1 $finish();
+   end
+
+endmodule
+

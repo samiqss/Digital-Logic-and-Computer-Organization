@@ -1,0 +1,182 @@
+//================================================================--
+// Design Unit  : cew testbench for lab7
+//
+// File Name    : tb.cew
+//
+// Purpose      : design verification
+//
+// Author       : Peter Walsh, Vancouver Island University
+//
+// System       : icarus (Linux)
+//
+//------------------------------------------------------------------
+// Revision List
+// Version      Author  Date    Changes
+// 1.0          PW      Sep 10  New version
+//================================================================--
+
+
+include(cew.v)
+
+module test_bench();
+
+   cew_Variables
+   wire t_Z_BAR;
+   reg t_reset, t_clk, t_X;
+   wire [0:2] t_s;
+
+   // state  encoding
+   localparam t_S0 = 3'b001, t_S1 = 3'b101, t_S2 = 3'b111;
+   localparam t_S3 = 3'b010, t_S4 = 3'b011, t_S5 = 3'b000;
+
+   lab7 #(t_S0, t_S1, t_S2, t_S3, t_S4, t_S5) cut(t_Z_BAR, t_s, t_clk, t_X, t_reset);
+
+   task clockTick; 
+      begin // nasty syntax
+         t_clk<=0; #3; 
+         t_clk<=1; #6;
+         t_clk<=0; #3;
+      end
+   endtask
+
+   task setState;
+
+      input [0:2]  x;
+
+      begin
+
+         t_reset<=1;#1;t_reset<=0;#1; t_reset<=1;#1;
+         case (x)
+            t_S0: begin
+            end
+            t_S1: begin
+              t_X<=1;clockTick(); 
+            end
+            t_S2: begin
+              t_X<=1;clockTick(); 
+              t_X<=1;clockTick(); 
+            end
+            t_S3: begin
+              t_X<=1;clockTick(); 
+              t_X<=1;clockTick(); 
+              t_X<=0;clockTick(); 
+            end
+            t_S4: begin
+              t_X<=1;clockTick(); 
+              t_X<=0;clockTick(); 
+            end
+            t_S5: begin
+              t_X<=1;clockTick(); 
+              t_X<=1;clockTick(); 
+              t_X<=0;clockTick(); 
+              t_X<=0;clockTick(); 
+            end
+         endcase
+      end
+ 
+   endtask
+
+   initial begin
+      $dumpfile("test_bench.vcd");
+      $dumpvars(0,test_bench);
+
+      // State t_S0
+      cew_Ncase(setState(t_S0);, t_s, t_S0, !==)
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S0, !==)
+
+      cew_Ncase(setState(t_S0);t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S1, !==)
+
+      // State t_S1
+      cew_Ncase(setState(t_S1);, t_s, t_S1, !==)
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S4, !==)
+
+      cew_Ncase(setState(t_S1);t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S2, !==)
+
+      // State t_S2
+      cew_Ncase(setState(t_S2);, t_s, t_S2, !==)
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S3, !==)
+
+      cew_Ncase(setState(t_S2);t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S2, !==)
+
+      // State t_S3
+      cew_Ncase(setState(t_S3);, t_s, t_S3, !==)
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 0, !==)
+      cew_Ncase(clockTick();, t_s, t_S5, !==)
+
+      cew_Ncase(setState(t_S3);t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S1, !==)
+
+      // State t_S4
+      cew_Ncase(setState(t_S4);, t_s, t_S4, !==)
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S5, !==)
+
+      cew_Ncase(setState(t_S4);t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S1, !==)
+
+      // State t_S5
+      cew_Ncase(setState(t_S5);, t_s, t_S5, !==)
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 0, !==)
+      cew_Ncase(clockTick();, t_s, t_S0, !==)
+
+      cew_Ncase(setState(t_S5);t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S1, !==)
+
+      // test case sequence used in lab
+
+      cew_Ncase(setState(t_S0);t_X<=0;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S0, !==)
+      cew_Ncase(t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S1, !==)
+      cew_Ncase(t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S2, !==)
+      cew_Ncase(t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S2, !==)
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S3, !==)
+      cew_Ncase(t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S1, !==)
+      cew_Ncase(t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S2, !==)
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S3, !==)
+
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 0, !==)
+      cew_Ncase(clockTick();, t_s, t_S5, !==)
+      
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 0, !==)
+      cew_Ncase(clockTick();, t_s, t_S0, !==)
+
+      cew_Ncase(t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S1, !==)
+      cew_Ncase(t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S2, !==)
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S3, !==)
+
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 0, !==)
+      cew_Ncase(clockTick();, t_s, t_S5, !==)
+
+      cew_Ncase(t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S1, !==)
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S4, !==)
+      cew_Ncase(t_X<=1;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S1, !==)
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S4, !==)
+      cew_Ncase(t_X<=0;#1;,t_Z_BAR, 1, !==)
+      cew_Ncase(clockTick();, t_s, t_S5, !==)
+
+      cew_Summary
+      #1 $finish();
+   end
+
+endmodule
+

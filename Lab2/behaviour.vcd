@@ -1,0 +1,163 @@
+$date
+	Thu Oct  4 00:01:04 2018
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module test_bench $end
+$var wire 1 ! t_E $end
+$var reg 1 " t_A $end
+$var reg 1 # t_B $end
+$var reg 1 $ t_C $end
+$var reg 1 % t_D $end
+$var integer 32 & cew_Error_Count [31:0] $end
+$var integer 32 ' cew_Test_Count [31:0] $end
+$var integer 32 ( i [31:0] $end
+$scope function gold $end
+$var reg 1 ) gold $end
+$var reg 1 * w $end
+$var reg 1 + x $end
+$var reg 1 , y $end
+$var reg 1 - z $end
+$upscope $end
+$scope module cut $end
+$var wire 1 " A $end
+$var wire 1 # B $end
+$var wire 1 $ C $end
+$var wire 1 % D $end
+$var reg 1 ! E $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+x-
+x,
+x+
+x*
+x)
+b0 (
+b1 '
+b0 &
+0%
+0$
+0#
+0"
+0!
+$end
+#1
+1!
+1%
+b10 '
+b1 (
+0)
+0*
+0+
+0,
+0-
+#2
+0%
+1$
+b11 '
+b10 (
+1)
+1-
+#3
+1%
+b100 '
+b11 (
+1,
+0-
+#4
+0%
+0$
+1#
+b101 '
+b100 (
+1-
+#5
+0!
+1%
+b110 '
+b101 (
+1+
+0,
+0-
+#6
+0%
+1$
+b111 '
+b110 (
+0)
+1-
+#7
+1%
+b1000 '
+b111 (
+1,
+0-
+#8
+0%
+0$
+0#
+1"
+b1001 '
+b1000 (
+1-
+#9
+1%
+b1010 '
+b1001 (
+1*
+0+
+0,
+0-
+#10
+1!
+0%
+1$
+b1011 '
+b1010 (
+1-
+#11
+1%
+b1100 '
+b1011 (
+1)
+1,
+0-
+#12
+0!
+0%
+0$
+1#
+b1101 '
+b1100 (
+1-
+#13
+1%
+b1110 '
+b1101 (
+0)
+1+
+0,
+0-
+#14
+0%
+1$
+b1111 '
+b1110 (
+1-
+#15
+1%
+b10000 '
+b1111 (
+1,
+0-
+#16
+b10000 (
+1-
+#17

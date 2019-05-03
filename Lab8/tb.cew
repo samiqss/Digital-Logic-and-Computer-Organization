@@ -1,0 +1,108 @@
+//================================================================--
+// Design Unit  : cew testbench lab8
+//
+// File Name    : tb.cew
+//
+// Purpose      : design verification
+//
+// Author       : Peter Walsh, Vancouver Island University
+//
+// System       : icarus (Linux)
+//
+//------------------------------------------------------------------
+// Revision List
+// Version      Author  Date    Changes
+// 1.0          PW      Sep 10  New version
+//================================================================--
+
+
+include(cew.v)
+
+module test_bench();
+
+   cew_Variables
+   reg t_reset, t_clk, t_SET, t_CLR;
+   wire [0:1] t_state;
+
+   // state  encoding
+   localparam t_S0 = 2'b00, t_S1 = 2'b01, t_S2 = 2'b11, t_S3 = 2'b10;
+
+   lab8 cut (t_state,  t_clk, t_SET, t_CLR, t_reset);
+
+   task clockTick; 
+      begin // nasty syntax
+         t_clk<=0; #3; 
+         t_clk<=1; #6;
+         t_clk<=0; #3;
+      end
+   endtask
+
+   task setState;
+
+      input [0:1]  x;
+
+      begin
+
+         t_reset<=1;#1;t_reset<=0;#1; t_reset<=1;#1;
+         case (x)
+            t_S0: begin
+            end
+            t_S1: begin
+              t_SET<=0;t_CLR<=0;clockTick(); 
+            end
+            t_S2: begin
+              t_SET<=0;t_CLR<=0;clockTick(); 
+              t_SET<=0;t_CLR<=0;clockTick(); 
+            end
+            t_S3: begin
+              t_SET<=0;t_CLR<=0;clockTick(); 
+              t_SET<=0;t_CLR<=0;clockTick(); 
+              t_SET<=0;t_CLR<=0;clockTick(); 
+            end
+         endcase
+      end
+ 
+   endtask
+
+   initial begin
+      $dumpfile("test_bench.vcd");
+      $dumpvars(0,test_bench);
+
+      // State t_S0
+      cew_Ncase(setState(t_S0);, t_state, t_S0, !==)
+      cew_Ncase(t_SET<=0;t_CLR<=0;clockTick();, t_state, t_S1, !==)
+      cew_Ncase(setState(t_S0);, t_state, t_S0, !==)
+      cew_Ncase(t_SET<=0;t_CLR<=1;clockTick();, t_state, t_S0, !==)
+      cew_Ncase(setState(t_S0);, t_state, t_S0, !==)
+      cew_Ncase(t_SET<=1;t_CLR<=0;clockTick();, t_state, t_S2, !==)
+
+      // State t_S1
+      cew_Ncase(setState(t_S1);, t_state, t_S1, !==)
+      cew_Ncase(t_SET<=0;t_CLR<=0;clockTick();, t_state, t_S2, !==)
+      cew_Ncase(setState(t_S1);, t_state, t_S1, !==)
+      cew_Ncase(t_SET<=0;t_CLR<=1;clockTick();, t_state, t_S0, !==)
+      cew_Ncase(setState(t_S1);, t_state, t_S1, !==)
+      cew_Ncase(t_SET<=1;t_CLR<=0;clockTick();, t_state, t_S2, !==)
+
+      // State t_S2
+      cew_Ncase(setState(t_S2);, t_state, t_S2, !==)
+      cew_Ncase(t_SET<=0;t_CLR<=0;clockTick();, t_state, t_S3, !==)
+      cew_Ncase(setState(t_S2);, t_state, t_S2, !==)
+      cew_Ncase(t_SET<=0;t_CLR<=1;clockTick();, t_state, t_S0, !==)
+      cew_Ncase(setState(t_S2);, t_state, t_S2, !==)
+      cew_Ncase(t_SET<=1;t_CLR<=0;clockTick();, t_state, t_S2, !==)
+
+      // State t_S3
+      cew_Ncase(setState(t_S3);, t_state, t_S3, !==)
+      cew_Ncase(t_SET<=0;t_CLR<=0;clockTick();, t_state, t_S0, !==)
+      cew_Ncase(setState(t_S3);, t_state, t_S3, !==)
+      cew_Ncase(t_SET<=0;t_CLR<=1;clockTick();, t_state, t_S0, !==)
+      cew_Ncase(setState(t_S3);, t_state, t_S3, !==)
+      cew_Ncase(t_SET<=1;t_CLR<=0;clockTick();, t_state, t_S2, !==)
+
+      cew_Summary
+      #1 $finish();
+   end
+
+endmodule
+

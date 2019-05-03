@@ -1,0 +1,79 @@
++------------------------+ 
+|  R: RESET              | 
+|  b: BREAK              | 
+|  r: RUN                | 
+|  A: READ PORT A        | 
+|  B: WRITE PORT B       | 
+|  C: READ PORT C        | 
+|  D: WRITE PORT D       | 
+|  s: STATUS             | 
+|  t: TOP                | 
+|  p: PSW                | 
+|  q: QUIT               | 
+|                        | 
+|  Enter menu selection: | 
++------------------------+ 
++------------------------+ 
+|  R: RESET              | 
+|  b: BREAK              | 
+|  r: RUN                | 
+|  A: READ PORT A        | 
+|  B: WRITE PORT B       | 
+|  C: READ PORT C        | 
+|  D: WRITE PORT D       | 
+|  s: STATUS             | 
+|  t: TOP                | 
+|  p: PSW                | 
+|  q: QUIT               | 
+|                        | 
+|  Enter menu selection: | 
++------------------------+ 
+The value of halt is 0
+The value of fault is 0
++------------------------+ 
+|  R: RESET              | 
+|  b: BREAK              | 
+|  r: RUN                | 
+|  A: READ PORT A        | 
+|  B: WRITE PORT B       | 
+|  C: READ PORT C        | 
+|  D: WRITE PORT D       | 
+|  s: STATUS             | 
+|  t: TOP                | 
+|  p: PSW                | 
+|  q: QUIT               | 
+|                        | 
+|  Enter menu selection: | 
++------------------------+ 
++------------------------+ 
+|  R: RESET              | 
+|  b: BREAK              | 
+|  r: RUN                | 
+|  A: READ PORT A        | 
+|  B: WRITE PORT B       | 
+|  C: READ PORT C        | 
+|  D: WRITE PORT D       | 
+|  s: STATUS             | 
+|  t: TOP                | 
+|  p: PSW                | 
+|  q: QUIT               | 
+|                        | 
+|  Enter menu selection: | 
++------------------------+ 
+The value of halt is 0
+The value of fault is 1
++------------------------+ 
+|  R: RESET              | 
+|  b: BREAK              | 
+|  r: RUN                | 
+|  A: READ PORT A        | 
+|  B: WRITE PORT B       | 
+|  C: READ PORT C        | 
+|  D: WRITE PORT D       | 
+|  s: STATUS             | 
+|  t: TOP                | 
+|  p: PSW                | 
+|  q: QUIT               | 
+|                        | 
+|  Enter menu selection: | 
++------------------------+ 

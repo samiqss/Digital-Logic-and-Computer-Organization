@@ -1,0 +1,166 @@
+$date
+	Mon Dec 17 22:20:11 2018
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module test_bench $end
+$var wire 16 ! t_int_wbus [15:0] $end
+$var wire 12 " t_int_abus [11:0] $end
+$var wire 1 # t_Z $end
+$var wire 4 $ t_IR [3:0] $end
+$var reg 1 % t_clk $end
+$var reg 14 & t_control [0:13] $end
+$var reg 16 ' t_int_rbus [15:0] $end
+$var integer 32 ( cew_Error_Count [31:0] $end
+$var integer 32 ) cew_Test_Count [31:0] $end
+$scope module cut $end
+$var wire 1 % clk $end
+$var wire 14 * control [0:13] $end
+$var wire 16 + int_abus [15:0] $end
+$var wire 16 , int_rbus [15:0] $end
+$var wire 16 - int_wbus [15:0] $end
+$var wire 1 # Z $end
+$var reg 16 . ACC [15:0] $end
+$var reg 4 / IR [3:0] $end
+$var reg 16 0 MR [15:0] $end
+$var reg 16 1 PC [15:0] $end
+$var reg 16 2 R0 [15:0] $end
+$var reg 16 3 RN [15:0] $end
+$var reg 16 4 abus [15:0] $end
+$var reg 16 5 alu [15:0] $end
+$var reg 16 6 wbus [15:0] $end
+$upscope $end
+$scope task clearControl $end
+$var integer 32 7 i [31:0] $end
+$upscope $end
+$scope task clockTick $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b1110 7
+bx 6
+bx 5
+bx 4
+bx 3
+bx 2
+bx 1
+bx 0
+bx /
+bx .
+bx -
+bx ,
+bx +
+b0 *
+b0 )
+b0 (
+bx '
+b0 &
+x%
+bx $
+x#
+bx "
+bx !
+$end
+#1
+0%
+b1000000000000 &
+b1000000000000 *
+#4
+b0 1
+1%
+#10
+0%
+#13
+b1100000000000 &
+b1100000000000 *
+#16
+b1 1
+1%
+#22
+0%
+#25
+b1 "
+b1 +
+b1 4
+b1100000000100 &
+b1100000000100 *
+#26
+b0 &
+b0 *
+b1110 7
+b1 )
+#27
+b10000000000 &
+b10000000000 *
+b0 '
+b0 ,
+#30
+b0 $
+b0 /
+1%
+#36
+0%
+#39
+b0 &
+b0 *
+b1110 7
+b10 )
+#40
+b1100000000 &
+b1100000000 *
+#43
+b0 .
+b0 2
+1%
+#49
+0%
+#52
+1#
+b0 5
+b1101100000 &
+b1101100000 *
+#55
+1%
+#61
+0%
+#64
+b0 !
+b0 -
+b0 6
+b1111100000 &
+b1111100000 *
+b11 )
+#65
+b0 &
+b0 *
+b1110 7
+b100 )
+#66
+b1000000000 &
+b1000000000 *
+b1 '
+b1 ,
+#69
+b1 2
+1%
+#75
+0%
+#78
+b1000000010 &
+b1000000010 *
+#81
+1%
+#87
+0%
+#90
+b1000000110 &
+b1000000110 *
+#91
+b101 )
+#92

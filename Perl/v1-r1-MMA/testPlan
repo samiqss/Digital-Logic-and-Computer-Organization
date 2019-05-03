@@ -1,0 +1,330 @@
+System Testing mma.v1.r1
+=========================
+
+
+Assumptions
+-----------
+   test case machine code is located starting at memory location 00
+   all variables are stored in memory
+
+   4K RAM at 0..4095
+   1K RAM/IO at 64512..65535
+
+Test Environment
+----------------
+   entire mma system exercised using the mma simulator with 
+   I/O redirection such that
+      test input stored in files
+      test output saved in files, checked with delta testing
+      directory structure
+         355-v1-r1-mma
+            tinpMac/ test cases stored one per file
+            tinpKey/ test case key strokes (same file name)
+            texp/    expected test output (same file name)
+            tact/    actual test output (same file name)
+
+    cew interactive driver menu
+
+         +------------------------+
+         |  R: RESET              |
+         |  b: BREAK              |
+         |  r: RUN                |
+         |  A: READ PORT A        |
+         |  B: WRITE PORT B       |
+         |  C: READ PORT C        |
+         |  D: WRITE PORT D       |
+         |  s: STATUS             |
+         |  q: Quit               |
+         |                        |
+         |  Enter menu selection: |
+         +------------------------+
+
+Test Case Selection Strategy
+----------------------------
+   normal cases (fault signal not asserted)
+      in the main, each test case to be a minimal program to 
+      observe instruction execution
+   exception case (fault signal asserted)
+      see fault test case 
+      no other exception testing performed
+         
+Test Implementation Strategy
+----------------------------
+   for each file f in tinpMac/
+      copy tinpMac/f to mac
+      simulate mma < tinpKey/f > tact/f
+      diff tact/f texp/f
+      
+Test Invocation
+---------------
+   make runtest
+
+Test Implementation
+-------------------     
+   data operation instructions
+
+      add
+      ---
+
+         Machine code: tinpMac/add
+         Test objective: 
+            calculate 5 + 1
+
+         0010000000000101 lda 1 from address 5 to ACC
+	 0100000000000110 add 5 from address 6 to ACC
+	 0011111111111100 sto A: Port A should have value in ACC
+	 0001000000000000 halt
+	 0000000000000000 Port A should have value 0000000000000110=6
+	 0000000000000001
+	 0000000000000101
+
+         Key strokes: tinpKey/add
+
+         R
+         r
+         A
+         q
+
+         Expected Output: texp/add
+
+      sub
+      ---
+
+         Machine code: tinpMac/suba
+         Test objective: 
+            calculate 3 - 1
+
+         0010000000000110 lda 3 from address 6 to ACC
+	 0101000000000101 sub 1 from ACC from address 5
+	 0011111111111100 sto store ACC into port A
+	 0001000000000000 halt
+	 0000000000000000 A should have the value 0000000000000010
+	 0000000000000001
+	 0000000000000011
+         
+	 Key strokes: tinpKey/suba
+
+         R
+         r
+         A
+         q
+
+         Expected Output: texp/suba
+
+   program control instructions
+         
+      lda
+      ---
+
+         Machine code: tinpMac/lda
+         Test objective: 
+           load FFFF from ACC to port A using lda
+
+         0010000000000101 lda FFF0 from address 5 to ACC
+	 0010000000000110 lda FFFF from address 6 to ACC
+	 0011111111111100 sto ACC to port A
+	 0001000000000000 halt
+	 0000000000000000 A should have the value FFFF
+	 1111111111110000
+	 1111111111111111
+
+         Key strokes: tinpKey/lda
+
+         R
+         r
+         A
+         q
+
+         Expected Output: texp/lda
+
+         Machine code: tinpMac/sto
+    sto
+    ---     
+         Test objective: 
+           store value in port D to port C
+
+         0010111111111111 lda port D to ACC
+	 0011111111111110 sto port C value in ACC
+	 0001000000000000 halt
+	 0000000000000000 C should have the value at D
+
+         Key strokes: tinpKey/sto
+
+         R
+	 D
+         1000000000000000
+         r
+         C
+         q
+
+         Expected Output: texp/sto
+
+
+      jne
+      ---
+
+         Machine code: tinpMac/jnea
+         Test objective:
+           Jump to halt if Z is not set
+
+	 0010000000001000 lda 3 from address 8 to ACC
+	 0100000000001001 add 5 to ACC from address 9
+	 0011111111111100 sto ACC value to port A 
+	 0111000000000110 jnz jump to halt if Z is not set
+	 0010000000001001 lda 5 from address 9 to ACC
+	 0011111111111100 sto ACC value to port A
+	 0001000000000000 XX: halt
+	 0000000000000000 Port A should have value 0000000000001000(8)
+	 0000000000000011
+	 0000000000000101
+	
+	 Key strokes: tinpKey/jnea
+
+         R
+         r
+         A
+         q
+
+         Expected Output: texp/jnea	 
+
+      jmp
+      ---
+
+         Machine code: tinpMac/jmpa
+         Test objective: 
+           clear Z using add operation
+           jump to XX 
+
+         0010000000000111 lda 3 from address 7 to ACC
+	 0100000000001000 add 5 from address 8 to ACC
+	 0110000000000100 jnz XX
+	 0010000000001000 lda 5 from address 8 to ACC
+	 0011111111111100 sto A has value in ACC
+	 0001000000000000 halt
+	 0000000000000000 Port A has value 0000000000001000
+	 0000000000000011
+	 0000000000000101
+
+         Key strokes: tinpKey/jmpa
+
+         R
+         r
+         A
+         q
+
+         Expected Output: texp/jmpa
+
+      halt/fault
+      ----------
+
+         Machine code: tinpMac/halt
+         Test objective: 
+            halt without asserting fault
+
+         0001 halt
+         0000 halt signal asserted, fault signal Dis-asserted
+	
+	 0001000000000000 halt
+         0000000000000000 halt signal asserted, fault signal dissasserted
+
+         Key strokes: tinpKey/halt
+
+         R
+         s
+         r
+         s
+         q
+
+         Expected Output: texp/halt
+
+         Machine code: tinpMac/fault
+         Test objective: 
+         assert fault because 1001 opcode
+
+         1001000000000000 fault
+         0000000000000000 fault signal asserted
+
+         Key strokes: tinpKey/fault
+
+         R
+         s
+         r
+         s
+         q
+
+         Expected Output: texp/fault
+
+   ports/PSW
+
+      A
+      -
+         testing responsibility passed to popext test case 
+  
+      B
+      -
+         untested 
+
+      C
+      -
+         testing responsibility passed to pushext test case 
+
+      D
+      -
+         testing responsibility passed to pushext test case 
+
+      PSW
+      ---
+
+         Machine code: tinpMac/restoreZa
+         Test objective: 
+              set Z using add operation
+              clear Z by writing to PSW
+              jump to XX 
+
+	 0010000000001001 lda address 9 holding 0 into  ACC
+ 	 0100000000001010 add from address A holding 0 to ACC
+ 	 0010000000001001 lda address 9 holding 0 into  ACC
+ 	 0011111111111011 sto PSW: clear Z
+ 	 0111000000000110 jne XX
+ 	 0010000000001011 lda address B holding FFFF to ACC
+ 	 0011111111111100 sto ACC into A
+ 	 0001000000000000 halt
+ 	 0000000000000000 A hold 0000
+ 	 0000000000000000
+ 	 0000000000000000
+ 	 1111111111111111         
+
+         Key strokes: tinpKey/restoreZa
+
+         R
+         r
+         A
+         q
+
+         Expected Output: texp/restoreZa
+
+         Machine code: tinpMac/setZ
+         Test objective: 
+            set Z using add operation
+            write PSW to A
+
+         0010000000000111 lda load FFFF from 7 to  ACC
+	 0010000000001000 lda 0000 from 8 to ACC
+	 0100000000001001 add 0 to acc
+	 0010111111111011 lda ACC with value at PSW
+	 0011111111111100 sto A: Port A has the value at PSW
+	 0001000000000000 halt
+	 0000000000000000 A should have the value at PSW 1000000000000000
+	 1111111111111111
+	 0000000000000000
+	 0000000000000000
+
+         Key strokes: tinpKey/setZ
+
+         R
+         r
+         A
+         q
+
+         Expected Output: texp/setZ
+

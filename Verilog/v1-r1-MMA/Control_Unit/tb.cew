@@ -1,0 +1,59 @@
+//================================================================--
+// Design Unit  : cew testbench for control_unit
+//
+// File Name    : tb.cew
+//
+// Purpose      : design verification
+//
+// Author       : Peter Walsh, Vancouver Island University
+//
+// System       : icarus (Linux)
+//
+//------------------------------------------------------------------
+// Revision List
+// Version      Author  Date    Changes
+// 1.0          PW      Nov 2016  New version
+//================================================================--
+
+include(cew.v)
+
+cew_Verilog_include("controlSignal.v")
+
+module test_bench();
+
+   cew_Variables
+   reg t_reset, t_clk;
+   wire  t_fault, t_halt, t_break;
+   wire  [0:`MAX_CONTROL_LINES-1] t_control;
+   reg [3:0] t_opcode;
+   reg [15:0] t_psw;
+
+
+   control_unit cut (t_control, t_clk, t_opcode, t_psw, t_reset, t_halt, t_fault, t_break);
+
+   task clockTick; 
+      begin // nasty syntax
+         t_clk<=0; #3; 
+         t_clk<=1; #6;
+         t_clk<=0; #3;
+      end
+   endtask
+
+   initial begin
+      $dumpfile("test_bench.vcd");
+      $dumpvars(0,test_bench);
+
+      t_reset<=0;#1;t_reset<=1;#1; t_reset<=0;#1;
+      t_opcode <= 4'b0001;
+      clockTick();
+      clockTick();
+      clockTick();
+      clockTick();
+      cew_Ncase(, t_halt, 1'b1, !==)
+
+      cew_Summary
+      #1 $finish();
+   end
+
+endmodule
+

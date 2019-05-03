@@ -1,0 +1,57 @@
+12:51 Friday .... modified ssbc-fig.pdf to reflect R4.
+
+16:04 Friday ..... finished with memory unit.
+Note that the mac format is
+machine code (8bits) comment 
+machine code (8bits) comment 
+machine code (8bits) comment 
+...
+At the moment, comments can not contain 0s or 1s.  I will fix this over
+the weekend...
+
+16:14 Friday .... modified artn file concerning R4
+
+17:25 Friday .... make the fix... comments can now contain 0s and 1s. I
+will review the code on Monday.  There are some magic numbers that must
+be cleaned up but I think the code is now functional. Please read the
+test bench to understand how to interface with the memory unit.
+
+11:36 Wed ..... changer the directory structure
+
+11:40 Wed working on data path
+
+10:46 Thursday finished the data path.... again look at the test bench
+to see how you would use it. The control signals are specified in the
+control.v file (which is soft linked to Doc/control_signals.v4.r3.  Note
+that neither the data path nor memory unit are thoroughly unit-tested.
+Thorough testing is moved to system testing.
+
+8:25 Friday .... the "main" model is in ssbc.v. It contains the menu
+for interactive testing. I have started coding ssbc.v.  I have finish
+the magic number removal from the memory unit.  I have started coding
+the control unit. The structure of the control unit should be enough
+that you can start work on the ssbc FSM.
+
+NOTE.... given the time we have left, the marks for Verilog modeling will
+be allocated for completing the control unit at the behavioural level
+(ie, no counter implementation). I will continue working on the other
+models with the intent that we can run make runtest just like we did
+for the Perl (261) implementation.
+
+
+10:25 Friday Nov 26 ... changed the interface to the control unit.
+The control unit gets the flags through psw from the memory unit.
+
+3:59pm Friday .... ssbc.v is complete. To execute the simulator type
+make 355-v5-r3-SSBC. Note that break is intended to execute a single
+instruction (see ssbc.v for details of user interface). Foe example,
+type R <cr> b<cr> and r <br> and see how far down the FSM each action
+takes you.
+
+I am not planning any further updates to the files unless...
+
+1. bugs are found
+2. I will add the make runtest files later on next week.
+
+Peter
+

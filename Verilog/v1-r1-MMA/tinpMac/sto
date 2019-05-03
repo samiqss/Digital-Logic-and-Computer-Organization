@@ -1,0 +1,4 @@
+0010111111111111 lda port D to ACC
+0011111111111110 sto port C value in ACC
+0001000000000000 halt
+0000000000000000 C should have the value at D
